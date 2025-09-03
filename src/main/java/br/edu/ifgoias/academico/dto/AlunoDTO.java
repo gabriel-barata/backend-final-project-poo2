@@ -1,9 +1,11 @@
 package br.edu.ifgoias.academico.dto;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,15 +24,16 @@ public class AlunoDTO {
 
     private Integer idaluno;
 
-    @NotBlank(message = "O nome do aluno é obrigatório.")
-    @Size(min = 2, max = 100, message = "O nome do aluno deve ter entre 2 e 100 caracteres.")
+    @NotNull(message = "O nome do aluno é obrigatório")
+    @Size(max = 100, message = "O nome do aluno deve ter no máximo 100 caracteres")
+    @NotBlank(message = "O nome do aluno é obrigatório")
     private String nome;
 
-    @NotBlank(message = "O sexo do aluno é obrigatório.")
-    @Size(max = 1, message = "O sexo deve ser 'M' ou 'F'.")
+    @NotNull(message = "O sexo do aluno é obrigatório")
     private String sexo;
 
-    @NotNull(message = "A data de nascimento é obrigatória.")
-    @PastOrPresent(message = "A data de nascimento não pode ser uma data futura.")
+    @NotNull(message = "A data de nascimento do aluno é obrigatória")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dt_nasc;
+
 }
