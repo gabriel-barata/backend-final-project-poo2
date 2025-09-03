@@ -10,6 +10,9 @@ import br.edu.ifgoias.academico.dto.AlunoMapper;
 import br.edu.ifgoias.academico.entities.Aluno;
 import br.edu.ifgoias.academico.repositories.AlunoRepository;
 import jakarta.transaction.Transactional;
+import br.edu.ifgoias.academico.entities.Curso;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -41,11 +44,13 @@ public class AlunoService {
     }
 
     @Transactional
-    public AlunoDTO alunoInserir(AlunoDTO aDTO) {
-        if (aDTO == null || aDTO.getNome() == null) {
+    public AlunoDTO alunoInserir(AlunoDTO alunoDTO) {
+        if (alunoDTO == null || alunoDTO.getNome() == null) {
             throw new IllegalArgumentException("Dados do aluno inválidos");
         }
-        Aluno aluno = alunoMapper.toEntity(aDTO);
+        alunoDTO.setIdaluno(null);
+
+        Aluno aluno = alunoMapper.toEntity(alunoDTO);
         alunoRep.save(aluno);
         return alunoMapper.toDTO(aluno);
     }
@@ -63,6 +68,10 @@ public class AlunoService {
     public void alunoDeletar(Integer id) {
         Aluno aluno = alunoRep.findById(id)
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado com ID: " + id));
+        List<Curso> cursos = new ArrayList<>(aluno.getCursos());
+        for (Curso curso : cursos) {
+            curso.getAlunos().remove(aluno);
+        }
         alunoRep.delete(aluno);
     }
 }

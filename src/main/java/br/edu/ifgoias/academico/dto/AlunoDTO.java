@@ -3,7 +3,9 @@ package br.edu.ifgoias.academico.dto;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import br.edu.ifgoias.academico.config.MultiFormatDateDeserializer; // Importe a nova classe
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,6 +36,7 @@ public class AlunoDTO {
 
     @NotNull(message = "A data de nascimento do aluno é obrigatória")
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = MultiFormatDateDeserializer.class)
     private LocalDate dt_nasc;
 
 }
